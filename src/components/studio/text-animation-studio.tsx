@@ -231,8 +231,14 @@ function HiringQuestionScene({ playing }: { playing: boolean }) {
 
 const TIMELINE_LINES_DELAY_MS = 200;
 const TIMELINE_PILLS_BASE_DELAY_MS = 1000;
+const TIMELINE_PILL_STAGGER_MS = 420;
+const TIMELINE_PILL_DURATION_MS = 1200;
+const TIMELINE_PILL_EASE = "cubic-bezier(0.33, 0.1, 0.25, 1)";
 const TIMELINE_TITLE_DELAY_MS =
-  TIMELINE_PILLS_BASE_DELAY_MS + TIMELINE_BARS.length * 280 + 200;
+  TIMELINE_PILLS_BASE_DELAY_MS +
+  (TIMELINE_BARS.length - 1) * TIMELINE_PILL_STAGGER_MS +
+  TIMELINE_PILL_DURATION_MS +
+  120;
 
 function DesignProcessScene({ playing }: { playing: boolean }) {
   return (
@@ -298,9 +304,9 @@ function DesignProcessScene({ playing }: { playing: boolean }) {
                   boxShadow: playing
                     ? `0 10px 28px ${bar.glow}, 0 1px 0 rgba(30,5,58,0.06)`
                     : "none",
-                  transition: `opacity 800ms ${SCENE_EASE}, transform 800ms ${SCENE_EASE}, box-shadow 800ms ${SCENE_EASE}`,
+                  transition: `opacity ${TIMELINE_PILL_DURATION_MS}ms ${TIMELINE_PILL_EASE}, transform ${TIMELINE_PILL_DURATION_MS}ms ${TIMELINE_PILL_EASE}, box-shadow ${TIMELINE_PILL_DURATION_MS}ms ${TIMELINE_PILL_EASE}`,
                   transitionDelay: playing
-                    ? `${TIMELINE_PILLS_BASE_DELAY_MS + index * 280}ms`
+                    ? `${TIMELINE_PILLS_BASE_DELAY_MS + index * TIMELINE_PILL_STAGGER_MS}ms`
                     : "0ms",
                 }}
               >
