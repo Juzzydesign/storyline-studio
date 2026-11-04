@@ -7,6 +7,7 @@ import { RecordingStage } from "@/components/studio/recording-stage";
 const ANIMATION_PAGES = [
   { id: "classic-framework", label: "Classic Framework" },
   { id: "design-process", label: "Design Process" },
+  { id: "hiring-question", label: "Hiring Question" },
 ] as const;
 
 type AnimationPageId = (typeof ANIMATION_PAGES)[number]["id"];
@@ -20,11 +21,51 @@ const FRAMEWORK_STEPS = [
 ] as const;
 
 const SCENE_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
-const CURVED_ARROW_LENGTH = 980;
-const CURVE_DRAW_MS = 1800;
-const CURVE_START_DELAY_MS = 160;
-const END_ARROW_DELAY_MS = CURVE_START_DELAY_MS + CURVE_DRAW_MS;
-const TITLE_DELAY_MS = END_ARROW_DELAY_MS + 80;
+
+const TIMELINE_COLS = 12;
+
+const TIMELINE_BARS = [
+  {
+    label: "Problem",
+    tone: "bg-[#FF7B5A]/40 text-[#1E053A]",
+    glow: "rgba(255, 123, 90, 0.35)",
+    row: 1,
+    start: 1,
+    span: 3,
+  },
+  {
+    label: "Approach",
+    tone: "bg-[#FF7B5A]/65 text-[#1E053A]",
+    glow: "rgba(255, 123, 90, 0.4)",
+    row: 2,
+    start: 3,
+    span: 3,
+  },
+  {
+    label: "Ideation",
+    tone: "bg-[#1E053A] text-white",
+    glow: "rgba(30, 5, 58, 0.28)",
+    row: 3,
+    start: 5,
+    span: 3,
+  },
+  {
+    label: "Solution",
+    tone: "bg-[#1E053A] text-white",
+    glow: "rgba(30, 5, 58, 0.28)",
+    row: 4,
+    start: 7,
+    span: 3,
+  },
+  {
+    label: "Outcome",
+    tone: "bg-gradient-to-r from-[#F2B8EB] via-[#D9C2FF] to-[#C0D6FF] text-[#1E053A]",
+    glow: "rgba(217, 194, 255, 0.55)",
+    row: 5,
+    start: 9,
+    span: 3,
+  },
+] as const;
 
 function FrameworkRow({
   animated,
@@ -68,7 +109,7 @@ function FrameworkRow({
                   : undefined
               }
             >
-              <p className="font-[family-name:var(--font-storyline-sans)] text-[1.35rem] leading-tight font-bold tracking-[-0.02em] text-[#1E053A] sm:text-[1.65rem]">
+              <p className="font-[family-name:var(--font-storyline-sans)] text-[1.35rem] leading-tight font-medium tracking-[-0.02em] text-[#1E053A] sm:text-[1.65rem]">
                 {step.label}
               </p>
             </div>
@@ -125,7 +166,7 @@ function FrameworkScene({ playing }: { playing: boolean }) {
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
       <p
-        className={`relative z-10 font-[family-name:var(--font-storyline-serif)] text-[2.15rem] leading-none font-normal tracking-[-0.02em] transition-all duration-[1000ms] sm:text-[2.6rem] ${
+        className={`relative z-10 font-[family-name:var(--font-storyline-sans)] text-[1.75rem] leading-none font-normal tracking-[-0.02em] transition-all duration-[1000ms] sm:text-[2rem] ${
           playing ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
         }`}
         style={{ transitionTimingFunction: SCENE_EASE }}
@@ -142,76 +183,140 @@ function FrameworkScene({ playing }: { playing: boolean }) {
   );
 }
 
+const HIRING_POPOUTS = [
+  { label: "Your decisions?", tone: "bg-[#FF7B5A]", delay: 1100 },
+  { label: "Your trade-offs?", tone: "bg-[#C0D6FF]", delay: 1600 },
+  { label: "Your contributions?", tone: "bg-[#F2B8EB]", delay: 2100 },
+] as const;
+
+function HiringQuestionScene({ playing }: { playing: boolean }) {
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-start overflow-hidden bg-[#F8F8F6] px-8 pt-[18%] font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12 sm:pt-[16%]">
+      <p
+        className={`relative z-10 text-center font-[family-name:var(--font-storyline-sans)] text-[1.75rem] leading-[1.2] font-normal tracking-[-0.02em] transition-all duration-[1400ms] sm:text-[2rem] ${
+          playing ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+        }`}
+        style={{ transitionTimingFunction: SCENE_EASE }}
+      >
+        What have I actually learned
+        <br />
+        about this designer?
+      </p>
+
+      <div className="relative z-10 mt-14 flex w-full max-w-[980px] items-center justify-center gap-4 sm:mt-16 sm:gap-6">
+        {HIRING_POPOUTS.map((item) => (
+          <div
+            key={item.label}
+            className={`${item.tone} flex min-h-[112px] min-w-0 flex-1 items-center justify-center rounded-[18px] px-4 py-10 text-center transition-all duration-[1100ms] sm:min-h-[132px] sm:px-5 sm:py-12 ${
+              playing
+                ? "scale-100 opacity-100"
+                : "scale-75 opacity-0"
+            }`}
+            style={{
+              transitionDelay: playing ? `${item.delay}ms` : "0ms",
+              transitionTimingFunction: SCENE_EASE,
+            }}
+          >
+            <p className="font-[family-name:var(--font-storyline-sans)] text-[1.25rem] leading-tight font-medium tracking-[-0.02em] text-[#1E053A] sm:text-[1.5rem]">
+              {item.label}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <SceneGradient />
+    </div>
+  );
+}
+
+const TIMELINE_LINES_DELAY_MS = 200;
+const TIMELINE_PILLS_BASE_DELAY_MS = 1000;
+const TIMELINE_TITLE_DELAY_MS =
+  TIMELINE_PILLS_BASE_DELAY_MS + TIMELINE_BARS.length * 280 + 200;
+
 function DesignProcessScene({ playing }: { playing: boolean }) {
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
-      <div className="relative z-10 w-full max-w-[1180px]">
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-6 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-10">
+      <div className="relative z-10 w-full max-w-[1100px]">
         <p
-          className={`absolute inset-x-0 bottom-full mb-10 text-center font-[family-name:var(--font-storyline-serif)] text-[2.15rem] leading-none font-normal tracking-[-0.02em] transition-all duration-[1100ms] sm:mb-12 sm:text-[2.6rem] ${
+          className={`absolute inset-x-0 bottom-full mb-10 text-center text-[1.75rem] leading-none font-normal tracking-[-0.02em] transition-all duration-[900ms] sm:mb-12 sm:text-[2rem] ${
             playing ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
           }`}
           style={{
-            transitionDelay: playing ? `${TITLE_DELAY_MS}ms` : "0ms",
+            transitionDelay: playing ? `${TIMELINE_TITLE_DELAY_MS}ms` : "0ms",
             transitionTimingFunction: SCENE_EASE,
           }}
         >
           Design process
         </p>
 
-        <FrameworkRow animated={false} playing={false} showConnectors={false} />
-
-        <div
-          className="pointer-events-none absolute inset-x-[5%] top-[calc(100%+10px)] sm:inset-x-[4%] sm:top-[calc(100%+14px)]"
-          aria-hidden
-        >
-          <svg
-            viewBox="0 0 1000 130"
-            className="h-auto w-full overflow-visible"
-            fill="none"
+        <div className="relative px-1 py-2 sm:px-2">
+          <div
+            className="pointer-events-none absolute inset-0 grid transition-opacity duration-[900ms]"
+            style={{
+              gridTemplateColumns: `repeat(${TIMELINE_COLS}, minmax(0, 1fr))`,
+              opacity: playing ? 1 : 0,
+              transitionDelay: playing ? `${TIMELINE_LINES_DELAY_MS}ms` : "0ms",
+              transitionTimingFunction: SCENE_EASE,
+            }}
+            aria-hidden
           >
-            <path
-              d="M 95 18 C 260 118, 740 118, 905 18"
-              stroke="#1E053A"
-              strokeWidth="3.25"
-              strokeLinecap="butt"
-              style={{
-                strokeDasharray: CURVED_ARROW_LENGTH,
-                strokeDashoffset: playing ? 0 : CURVED_ARROW_LENGTH,
-                transition: `stroke-dashoffset ${CURVE_DRAW_MS}ms linear`,
-                transitionDelay: playing ? `${CURVE_START_DELAY_MS}ms` : "0ms",
-              }}
-            />
-          </svg>
+            {Array.from({ length: TIMELINE_COLS }, (_, index) => (
+              <div
+                key={index}
+                className="border-l border-dashed border-[#1E053A]/14 first:border-l-0"
+                style={{
+                  transform: playing ? "scaleY(1)" : "scaleY(0)",
+                  transformOrigin: "top",
+                  transition: `transform 700ms ${SCENE_EASE}`,
+                  transitionDelay: playing
+                    ? `${TIMELINE_LINES_DELAY_MS + index * 45}ms`
+                    : "0ms",
+                }}
+              />
+            ))}
+          </div>
 
-          {/* Start arrow — anchored on the curve end */}
-          <ArrowRight
-            className="absolute size-6 text-[#1E053A] sm:size-7"
-            strokeWidth={2.5}
+          <div
+            className="relative grid gap-y-4"
             style={{
-              left: "9.5%",
-              top: "13.85%",
-              opacity: playing ? 1 : 0,
-              transform: "translate(-50%, -50%) rotate(-148deg)",
-              transition: `opacity 280ms ${SCENE_EASE}`,
-              transitionDelay: playing ? "0ms" : "0ms",
+              gridTemplateColumns: `repeat(${TIMELINE_COLS}, minmax(0, 1fr))`,
+              gridTemplateRows: `repeat(${TIMELINE_BARS.length}, minmax(0, auto))`,
             }}
-          />
-
-          {/* End arrow — appears as the line reaches Outcome */}
-          <ArrowRight
-            className="absolute size-6 text-[#1E053A] sm:size-7"
-            strokeWidth={2.5}
-            style={{
-              left: "90.5%",
-              top: "13.85%",
-              opacity: playing ? 1 : 0,
-              transform: "translate(-50%, -50%) rotate(-32deg)",
-              transition: playing
-                ? "opacity 0ms linear"
-                : `opacity 200ms ${SCENE_EASE}`,
-              transitionDelay: playing ? `${END_ARROW_DELAY_MS}ms` : "0ms",
-            }}
-          />
+          >
+            {TIMELINE_BARS.map((bar, index) => (
+              <div
+                key={bar.label}
+                className={`${bar.tone} relative flex h-12 origin-left items-center justify-center rounded-full px-4 text-center text-[15px] font-medium tracking-[-0.02em] sm:h-14 sm:text-[17px] ${
+                  playing
+                    ? "translate-x-0 scale-x-100 opacity-100"
+                    : "translate-x-2 scale-x-[0.7] opacity-0"
+                }`}
+                style={{
+                  gridColumn: `${bar.start} / span ${bar.span}`,
+                  gridRow: bar.row,
+                  boxShadow: playing
+                    ? `0 10px 28px ${bar.glow}, 0 1px 0 rgba(30,5,58,0.06)`
+                    : "none",
+                  transition: `opacity 800ms ${SCENE_EASE}, transform 800ms ${SCENE_EASE}, box-shadow 800ms ${SCENE_EASE}`,
+                  transitionDelay: playing
+                    ? `${TIMELINE_PILLS_BASE_DELAY_MS + index * 280}ms`
+                    : "0ms",
+                }}
+              >
+                <span
+                  className={`absolute left-2.5 flex size-5 items-center justify-center rounded-full text-[10px] font-semibold sm:left-3 sm:size-6 sm:text-[11px] ${
+                    bar.tone.includes("bg-[#1E053A]")
+                      ? "bg-white/15 text-white"
+                      : "bg-[#1E053A]/10 text-[#1E053A]"
+                  }`}
+                >
+                  {index + 1}
+                </span>
+                {bar.label}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -318,6 +423,9 @@ export function TextAnimationStudio() {
           ) : null}
           {activePage === "design-process" ? (
             <DesignProcessScene playing={playing} />
+          ) : null}
+          {activePage === "hiring-question" ? (
+            <HiringQuestionScene playing={playing} />
           ) : null}
         </RecordingStage>
       </div>
