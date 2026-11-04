@@ -8,6 +8,7 @@ const ANIMATION_PAGES = [
   { id: "classic-framework", label: "Classic Framework" },
   { id: "design-process", label: "Design Process" },
   { id: "hiring-question", label: "Hiring Question" },
+  { id: "three-stories", label: "3 Stories" },
 ] as const;
 
 type AnimationPageId = (typeof ANIMATION_PAGES)[number]["id"];
@@ -188,6 +189,160 @@ const HIRING_POPOUTS = [
   { label: "Your trade-offs?", tone: "bg-[#C0D6FF]", delay: 1600 },
   { label: "Your contributions?", tone: "bg-[#F2B8EB]", delay: 2100 },
 ] as const;
+
+const STORY_CALLOUTS = [
+  {
+    label: "1. Business needs vs. research",
+    delay: 900,
+    side: "right" as const,
+    top: "8%",
+  },
+] as const;
+
+function ThreeStoriesScene({ playing }: { playing: boolean }) {
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-start overflow-hidden bg-[#F8F8F6] px-8 pt-[14%] font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12 sm:pt-[12%]">
+      <div className="relative z-10 flex h-[min(42vw,200px)] w-[min(86vw,460px)] items-center justify-center sm:h-[220px] sm:w-[500px]">
+        <svg
+          viewBox="0 0 320 160"
+          className={`absolute inset-0 size-full transition-all duration-[1100ms] ${
+            playing ? "scale-100 opacity-100" : "scale-95 opacity-0"
+          }`}
+          style={{
+            transitionDelay: playing ? "280ms" : "0ms",
+            transitionTimingFunction: SCENE_EASE,
+          }}
+          fill="none"
+          aria-hidden
+        >
+          <path
+            d="M 160 18
+               C 230 16, 292 42, 304 80
+               C 314 116, 278 144, 210 150
+               C 170 154, 110 152, 70 140
+               C 28 126, 12 98, 18 68
+               C 26 36, 90 20, 160 18 Z"
+            stroke="#1E053A"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.9"
+          />
+          <path
+            d="M 158 22
+               C 224 18, 286 44, 298 78
+               C 310 114, 272 140, 206 146
+               C 164 150, 108 148, 68 136
+               C 30 122, 16 96, 22 70
+               C 30 42, 94 24, 158 22 Z"
+            stroke="#1E053A"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.45"
+          />
+          <path
+            d="M 164 20
+               C 234 22, 294 48, 302 84
+               C 310 118, 274 142, 208 148
+               C 168 152, 114 150, 74 138
+               C 34 124, 14 100, 20 72
+               C 28 40, 98 18, 164 20"
+            stroke="#1E053A"
+            strokeWidth="1.1"
+            strokeLinecap="round"
+            opacity="0.35"
+          />
+        </svg>
+
+        <p
+          className={`relative z-10 text-center text-[1.75rem] leading-none font-normal tracking-[-0.02em] transition-all duration-[1000ms] sm:text-[2rem] ${
+            playing ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+          }`}
+          style={{ transitionTimingFunction: SCENE_EASE }}
+        >
+          Three stories
+        </p>
+
+        {STORY_CALLOUTS.map((callout) => (
+          <div
+            key={callout.label}
+            className={`absolute z-20 flex items-center gap-2 ${
+              callout.side === "right" ? "left-full ml-1" : "right-full mr-1"
+            } ${
+              playing
+                ? "translate-x-0 opacity-100"
+                : callout.side === "right"
+                  ? "translate-x-3 opacity-0"
+                  : "-translate-x-3 opacity-0"
+            }`}
+            style={{
+              top: callout.top,
+              transition: `opacity 800ms ${SCENE_EASE}, transform 800ms ${SCENE_EASE}`,
+              transitionDelay: playing ? `${callout.delay}ms` : "0ms",
+            }}
+          >
+            {callout.side === "left" ? (
+              <>
+                <p className="max-w-[220px] text-right text-[14px] font-medium tracking-[-0.02em] sm:text-[15px]">
+                  {callout.label}
+                </p>
+                <svg
+                  viewBox="0 0 72 28"
+                  className="h-7 w-[72px] shrink-0"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M 68 14 C 48 8, 28 6, 8 12"
+                    stroke="#1E053A"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 16 6 L 6 13 L 18 18"
+                    stroke="#1E053A"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </>
+            ) : (
+              <>
+                <svg
+                  viewBox="0 0 72 28"
+                  className="h-7 w-[72px] shrink-0"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M 4 14 C 24 8, 44 6, 64 12"
+                    stroke="#1E053A"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 56 6 L 66 13 L 54 18"
+                    stroke="#1E053A"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <p className="max-w-[240px] text-left text-[14px] font-medium tracking-[-0.02em] sm:text-[15px]">
+                  {callout.label}
+                </p>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <SceneGradient />
+    </div>
+  );
+}
 
 function HiringQuestionScene({ playing }: { playing: boolean }) {
   return (
@@ -432,6 +587,9 @@ export function TextAnimationStudio() {
           ) : null}
           {activePage === "hiring-question" ? (
             <HiringQuestionScene playing={playing} />
+          ) : null}
+          {activePage === "three-stories" ? (
+            <ThreeStoriesScene playing={playing} />
           ) : null}
         </RecordingStage>
       </div>
