@@ -452,57 +452,28 @@ function PersonaCard({
 function OnboardingResearch({
   persona,
   stickyNotes,
-  compact = false,
 }: {
   persona: Persona;
   stickyNotes: StickyNote[];
   compact?: boolean;
 }) {
   return (
-    <div
-      className={`flex flex-col items-start sm:flex-row ${
-        compact
-          ? "mt-4 gap-4 sm:gap-5"
-          : "mt-8 gap-8 sm:gap-10"
-      }`}
-    >
-      {compact ? null : <PersonaCard persona={persona} />}
+    <div className="mt-8 flex flex-col items-start gap-8 sm:flex-row sm:gap-10">
+      <PersonaCard persona={persona} />
 
-      <div
-        className={
-          compact
-            ? "flex flex-row flex-wrap items-start gap-2.5 pt-1"
-            : "flex flex-col gap-4 pt-1"
-        }
-      >
-        {stickyNotes.map((note, index) => (
+      <div className="flex flex-col gap-4 pt-1">
+        {stickyNotes.map((note) => (
           <div
             key={note.title}
-            className={`bg-[#FFE566] text-[#1C1C1E] ${
-              compact ? "w-[118px] shrink-0 p-2" : `w-[168px] p-3 ${note.className}`
-            }`}
+            className={`w-[168px] bg-[#FFE566] p-3 text-[#1C1C1E] ${note.className}`}
             style={{
               transform: `rotate(${note.rotate})`,
-              marginTop: compact ? (index % 2 === 0 ? 0 : 8) : undefined,
-              boxShadow: compact
-                ? "0 1px 1px rgba(0,0,0,0.04), 0 4px 10px rgba(0,0,0,0.07)"
-                : "0 1px 1px rgba(0,0,0,0.04), 0 8px 18px rgba(0,0,0,0.08)",
+              boxShadow:
+                "0 1px 1px rgba(0,0,0,0.04), 0 8px 18px rgba(0,0,0,0.08)",
             }}
           >
-            <p
-              className={`font-bold leading-tight ${
-                compact ? "text-[10px]" : "text-[12px]"
-              }`}
-            >
-              {note.title}
-            </p>
-            <ul
-              className={`leading-snug ${
-                compact
-                  ? "mt-1.5 space-y-0.5 text-[9px]"
-                  : "mt-2 space-y-1 text-[11px]"
-              }`}
-            >
+            <p className="text-[12px] font-bold leading-tight">{note.title}</p>
+            <ul className="mt-2 space-y-1 text-[11px] leading-snug">
               {note.lines.map((line) => (
                 <li key={line} className="flex gap-1.5">
                   <span className="mt-[6px] size-1 shrink-0 rounded-full bg-black/35" />
@@ -629,14 +600,12 @@ function OnboardingSolution({
   compact?: boolean;
 }) {
   return (
-    <div className={compact ? "mt-3" : "mt-8"}>
-      <p
-        className={`font-medium tracking-[0.12em] text-[#8E8E93] uppercase ${
-          compact ? "mb-2 text-[9px]" : "mb-4 text-[11px]"
-        }`}
-      >
-        {label}
-      </p>
+    <div className={compact ? "mt-4" : "mt-8"}>
+      {compact ? null : (
+        <p className="mb-4 text-[11px] font-medium tracking-[0.12em] text-[#8E8E93] uppercase">
+          {label}
+        </p>
+      )}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
         {screens.map((screen, index) => (
           <div key={screen.step} className="flex items-center gap-1.5">
@@ -649,6 +618,44 @@ function OnboardingSolution({
                 aria-hidden
               />
             ) : null}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function OnboardingResearchCompact({
+  persona,
+  stickyNotes,
+}: {
+  persona: Persona;
+  stickyNotes: StickyNote[];
+}) {
+  return (
+    <div className="mt-4 flex items-start gap-4">
+      <PersonaCard persona={persona} compact />
+      <div className="flex flex-wrap gap-2.5 pt-1">
+        {stickyNotes.slice(0, 2).map((note, index) => (
+          <div
+            key={note.title}
+            className="w-[120px] bg-[#FFE566] p-2.5 text-[#1C1C1E]"
+            style={{
+              transform: `rotate(${note.rotate})`,
+              marginTop: index % 2 === 0 ? 0 : 10,
+              boxShadow:
+                "0 1px 1px rgba(0,0,0,0.04), 0 6px 14px rgba(0,0,0,0.08)",
+            }}
+          >
+            <p className="text-[11px] font-bold leading-tight">{note.title}</p>
+            <ul className="mt-1.5 space-y-1 text-[10px] leading-snug">
+              {note.lines.slice(0, 2).map((line) => (
+                <li key={line} className="flex gap-1.5">
+                  <span className="mt-[5px] size-1 shrink-0 rounded-full bg-black/35" />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
@@ -817,19 +824,110 @@ function AnalyticsSolutionExample() {
   );
 }
 
-function AnalyticsCaseStudy({
+function AnalyticsCaseStudyCompact({
   example,
 }: {
   example: Extract<CaseStudyExample, { layout: "analytics" }>;
+}) {
+  const problem = example.sections.find((s) => s.id === "problem")!;
+
+  return (
+    <article className="w-full bg-white font-[family-name:var(--font-analytics-sans)] text-[#2A3D37]">
+      <div className="flex flex-col gap-7 px-8 py-8">
+        <header className="border-b border-[#E8EEEB] pb-5">
+          <h1 className="max-w-[14ch] font-[family-name:var(--font-analytics-serif)] text-[2rem] leading-[1.08] tracking-[-0.03em] text-[#14352C]">
+            {example.title}
+          </h1>
+          <p className="mt-3 max-w-[32em] text-[15px] leading-relaxed text-[#6A8076]">
+            {example.subtitle}
+          </p>
+        </header>
+
+        <section>
+          <h3 className="text-[1.15rem] font-semibold tracking-tight text-[#14352C]">
+            {problem.title}
+          </h3>
+          <p className="mt-2 text-[15px] leading-[1.55] text-[#3a3a3c]">
+            {problem.body[0]}
+          </p>
+        </section>
+
+        <section>
+          <h3 className="text-[1.15rem] font-semibold tracking-tight text-[#14352C]">
+            Research
+          </h3>
+          <div className="mt-3 space-y-3">
+            {example.insights.slice(0, 2).map((insight) => (
+              <div key={insight.label} className="flex gap-2.5">
+                <span
+                  className="mt-1.5 size-2 shrink-0 rounded-[3px] bg-[#1F4D40]"
+                  aria-hidden
+                />
+                <div>
+                  <p className="text-[13px] font-semibold text-[#14352C]">
+                    {insight.label}
+                  </p>
+                  <p className="mt-0.5 text-[13px] leading-relaxed text-[#5B736A]">
+                    {insight.finding}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h3 className="text-[1.15rem] font-semibold tracking-tight text-[#14352C]">
+            Solution
+          </h3>
+          <div className="mt-3">
+            <AnalyticsSolutionExample />
+          </div>
+        </section>
+
+        <section>
+          <div className="grid grid-cols-3 gap-2.5">
+            {[
+              { value: "<45s", label: "Time to metric" },
+              { value: "+24%", label: "Weekly actives" },
+              { value: "Fewer", label: "Chart requests" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-2xl border border-[#D2DED8] bg-[#F7FAF8] px-3 py-3"
+              >
+                <p className="font-[family-name:var(--font-analytics-serif)] text-[22px] leading-none text-[#14352C]">
+                  {stat.value}
+                </p>
+                <p className="mt-1.5 text-[11px] text-[#5B736A]">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </article>
+  );
+}
+
+function AnalyticsCaseStudy({
+  example,
+  compact = false,
+}: {
+  example: Extract<CaseStudyExample, { layout: "analytics" }>;
+  compact?: boolean;
 }) {
   const problem = example.sections.find((s) => s.id === "problem")!;
   const research = example.sections.find((s) => s.id === "research")!;
   const solution = example.sections.find((s) => s.id === "solution")!;
   const outcome = example.sections.find((s) => s.id === "outcome")!;
 
+  if (compact) {
+    return <AnalyticsCaseStudyCompact example={example} />;
+  }
+
   return (
     <article
-      className="mx-auto w-full bg-white font-[family-name:var(--font-analytics-sans)] text-[#2A3D37]"
+      className="w-full bg-white font-[family-name:var(--font-analytics-sans)] text-[#2A3D37]"
       style={{ maxWidth: CASE_STUDY_FRAME.width }}
     >
       <div
@@ -842,10 +940,7 @@ function AnalyticsCaseStudy({
         }}
       >
         <header className="border-b border-[#E8EEEB] pb-10">
-          <p className="text-[12px] font-medium tracking-[0.14em] text-[#5B736A] uppercase">
-            Analytics
-          </p>
-          <h1 className="mt-3 max-w-[16ch] font-[family-name:var(--font-analytics-serif)] text-[2.4rem] leading-[1.05] tracking-[-0.03em] text-[#14352C] sm:text-[3rem]">
+          <h1 className="max-w-[16ch] font-[family-name:var(--font-analytics-serif)] text-[2.4rem] leading-[1.05] tracking-[-0.03em] text-[#14352C] sm:text-[3rem]">
             {example.title}
           </h1>
           <p className="mt-5 max-w-[34em] text-[17px] leading-relaxed text-[#6A8076]">
@@ -857,7 +952,7 @@ function AnalyticsCaseStudy({
           <h3 className="text-[1.375rem] font-semibold tracking-tight text-[#14352C]">
             {problem.title}
           </h3>
-          <div className="mt-4 flex flex-col gap-4">
+          <div className="mt-4">
             <p className="text-[17px] leading-[1.65] text-[#3a3a3c]">
               {problem.body[0]}
             </p>
@@ -868,7 +963,7 @@ function AnalyticsCaseStudy({
           <h3 className="text-[1.375rem] font-semibold tracking-tight text-[#14352C]">
             {research.title}
           </h3>
-          <div className="mt-4 flex flex-col gap-4">
+          <div className="mt-4">
             <p className="text-[17px] leading-[1.65] text-[#3a3a3c]">
               {research.body[0]}
             </p>
@@ -932,7 +1027,7 @@ function AnalyticsCaseStudy({
           <h3 className="text-[1.375rem] font-semibold tracking-tight text-[#14352C]">
             {solution.title}
           </h3>
-          <div className="mt-4 flex flex-col gap-4">
+          <div className="mt-4">
             <p className="text-[17px] leading-[1.65] text-[#3a3a3c]">
               {solution.body[0]}
             </p>
@@ -947,7 +1042,7 @@ function AnalyticsCaseStudy({
           <h3 className="text-[1.375rem] font-semibold tracking-tight text-[#14352C]">
             {outcome.title}
           </h3>
-          <div className="mt-4 flex flex-col gap-4">
+          <div className="mt-4">
             <p className="text-[17px] leading-[1.65] text-[#3a3a3c]">
               {outcome.body[0]}
             </p>
@@ -979,13 +1074,18 @@ function AnalyticsCaseStudy({
 function FlowPill({
   label,
   tone = "dark",
+  size = "default",
 }: {
   label: string;
   tone?: "dark" | "accent";
+  size?: "default" | "compact";
 }) {
+  const compact = size === "compact";
   return (
     <span
-      className={`inline-flex rounded-full px-3 py-1 text-[11px] font-medium whitespace-nowrap ${
+      className={`inline-flex rounded-full font-medium whitespace-nowrap ${
+        compact ? "px-2 py-0.5 text-[9px]" : "px-3 py-1 text-[11px]"
+      } ${
         tone === "accent"
           ? "bg-[#D8FF3E] text-black"
           : "bg-black text-white"
@@ -996,30 +1096,49 @@ function FlowPill({
   );
 }
 
-function SearchUserFlows() {
+function SearchUserFlows({ compact = false }: { compact?: boolean }) {
   const branches = [
     {
       hub: "search AI",
-      nodes: ["ask question", "refine intent", "show matches", "why this fit"],
+      nodes: ["ask question", "refine intent", "show matches"],
     },
     {
       hub: "results",
-      nodes: ["list view", "grid view", "compare", "save item"],
+      nodes: ["list view", "compare", "save item"],
     },
     {
       hub: "assist",
-      nodes: ["similar finds", "under budget", "in stock now", "gift ideas"],
+      nodes: ["similar finds", "under budget", "gift ideas"],
     },
     {
       hub: "explore",
-      nodes: [
-        "liked by people like you",
-        "interesting nearby",
-        "recently opened",
-        "editor picks",
-      ],
+      nodes: ["nearby", "recent", "editor picks"],
     },
   ];
+
+  if (compact) {
+    return (
+      <div className="mt-3 rounded-md border border-[#D7DEE8] bg-[#F7F4EE] p-3">
+        <div className="flex items-center gap-1.5">
+          <FlowPill label="start" size="compact" />
+          <div className="h-px w-4 bg-black/50" />
+          <FlowPill label="query" size="compact" />
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-2.5">
+          {branches.map((branch) => (
+            <div key={branch.hub} className="space-y-1.5">
+              <FlowPill label={branch.hub} tone="accent" size="compact" />
+              <div className="ml-2 space-y-1 border-l border-black/20 pl-2">
+                {branch.nodes.map((node) => (
+                  <FlowPill key={node} label={node} size="compact" />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-8 overflow-x-auto pb-2">
@@ -1027,7 +1146,7 @@ function SearchUserFlows() {
         <div className="flex items-center gap-2">
           <FlowPill label="start" />
           <div className="h-px w-6 bg-black/70" />
-          <FlowPill label="onboarding" />
+          <FlowPill label="query" />
         </div>
 
         <div className="mt-4 ml-4 border-l border-black/25 pl-4">
@@ -1052,6 +1171,46 @@ function SearchUserFlows() {
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function SearchSolutionCompact() {
+  return (
+    <div className="mt-3 overflow-hidden rounded-lg border border-[#D7DEE8] bg-white">
+      <div className="bg-[#0B1F3A] px-4 py-3.5 text-[#E8F7F5]">
+        <p className="text-[13px] leading-relaxed">
+          “Find a linen midi dress under $80 for a warm weekend trip.”
+        </p>
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          {["Natural fabric", "Midi length", "Under $80"].map((chip) => (
+            <span
+              key={chip}
+              className="rounded border border-white/15 bg-white/10 px-2 py-0.5 text-[10px] text-[#D7E8E4]"
+            >
+              {chip}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="divide-y divide-[#D7DEE8]">
+        {[
+          { title: "Soft linen midi", price: "$64" },
+          { title: "Daylight wrap dress", price: "$72" },
+        ].map((item) => (
+          <div
+            key={item.title}
+            className="flex items-center justify-between gap-3 px-4 py-2.5"
+          >
+            <p className="text-[13px] font-semibold text-[#0B1F3A]">
+              {item.title}
+            </p>
+            <p className="text-[13px] tabular-nums text-[#0B1F3A]">
+              {item.price}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -1146,14 +1305,67 @@ function SearchSolution() {
   );
 }
 
-function SearchCaseStudy({
+function SearchCaseStudyCompact({
   example,
 }: {
   example: Extract<CaseStudyExample, { layout: "search" }>;
 }) {
+  const problem = example.sections.find((s) => s.id === "problem")!;
+
+  return (
+    <article className="w-full bg-[#F4F7FB] font-[family-name:var(--font-search-sans)] text-[#0B1F3A]">
+      <header className="relative overflow-hidden border-b border-[#D7DEE8] bg-[#0B1F3A] px-8 py-7 text-[#E8F7F5]">
+        <div className="absolute -top-10 -right-10 size-36 rounded-full bg-[#3DDC97]/15 blur-2xl" />
+        <h1 className="relative font-[family-name:var(--font-search-display)] text-[1.85rem] leading-[1.12] tracking-tight text-balance">
+          {example.title}
+        </h1>
+        <p className="relative mt-3 max-w-[30em] text-[14px] leading-relaxed text-[#B7CCC8]">
+          {example.subtitle}
+        </p>
+      </header>
+
+      <div className="flex flex-col gap-6 px-8 py-7">
+        <section>
+          <h3 className="text-[1.15rem] font-semibold tracking-tight text-[#0B1F3A]">
+            {problem.title}
+          </h3>
+          <p className="mt-2 text-[14px] leading-[1.55] text-[#334155]">
+            {problem.body[0]}
+          </p>
+        </section>
+
+        <section>
+          <h3 className="text-[1.15rem] font-semibold tracking-tight text-[#0B1F3A]">
+            User Flows
+          </h3>
+          <SearchUserFlows compact />
+        </section>
+
+        <section>
+          <h3 className="text-[1.15rem] font-semibold tracking-tight text-[#0B1F3A]">
+            Solution
+          </h3>
+          <SearchSolutionCompact />
+        </section>
+      </div>
+    </article>
+  );
+}
+
+function SearchCaseStudy({
+  example,
+  compact = false,
+}: {
+  example: Extract<CaseStudyExample, { layout: "search" }>;
+  compact?: boolean;
+}) {
+  if (compact) {
+    return <SearchCaseStudyCompact example={example} />;
+  }
+
   return (
     <article
-      className="mx-auto w-full bg-[#F4F7FB] font-[family-name:var(--font-search-sans)] text-[#0B1F3A]"
+      className="w-full bg-[#F4F7FB] font-[family-name:var(--font-search-sans)] text-[#0B1F3A]"
       style={{ maxWidth: CASE_STUDY_FRAME.width }}
     >
       <header
@@ -1166,10 +1378,7 @@ function SearchCaseStudy({
         }}
       >
         <div className="absolute -top-10 -right-10 size-40 rounded-full bg-[#3DDC97]/15 blur-2xl" />
-        <p className="text-[12px] font-semibold tracking-[0.2em] text-[#8EB8B2] uppercase">
-          Case study
-        </p>
-        <h1 className="mt-4 font-[family-name:var(--font-search-display)] text-[2rem] leading-[1.12] tracking-tight text-balance sm:text-[2.4rem]">
+        <h1 className="font-[family-name:var(--font-search-display)] text-[2rem] leading-[1.12] tracking-tight text-balance sm:text-[2.4rem]">
           {example.title}
         </h1>
         <p className="mt-5 max-w-[30em] text-[16px] leading-relaxed text-[#B7CCC8]">
@@ -1224,6 +1433,59 @@ const ONBOARDING_PAGES = [
 
 type OnboardingPageId = (typeof ONBOARDING_PAGES)[number]["id"];
 
+function OnboardingCaseStudyCompact({
+  example,
+}: {
+  example: Extract<CaseStudyExample, { layout: "onboarding" }>;
+}) {
+  const problem = example.sections.find((s) => s.id === "problem")!;
+
+  return (
+    <article className="w-full bg-white">
+      <header className="border-b border-black/5 px-8 py-7">
+        <h1 className="text-[1.85rem] leading-tight font-semibold tracking-tight text-foreground">
+          {example.title}
+        </h1>
+        <p className="mt-2.5 max-w-[34em] text-[14px] leading-relaxed text-muted-foreground">
+          {example.subtitle}
+        </p>
+      </header>
+
+      <div className="flex flex-col gap-6 px-8 py-7">
+        <section>
+          <h2 className="text-[1.15rem] font-semibold tracking-tight text-foreground">
+            {problem.title}
+          </h2>
+          <p className="mt-2 text-[14px] leading-[1.55] text-[#3a3a3c]">
+            {problem.body[0]}
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-[1.15rem] font-semibold tracking-tight text-foreground">
+            Research
+          </h2>
+          <OnboardingResearchCompact
+            persona={example.persona}
+            stickyNotes={example.stickyNotes}
+          />
+        </section>
+
+        <section>
+          <h2 className="text-[1.15rem] font-semibold tracking-tight text-foreground">
+            Solution
+          </h2>
+          <OnboardingSolution
+            label={example.flowLabel}
+            screens={example.flowScreens}
+            compact
+          />
+        </section>
+      </div>
+    </article>
+  );
+}
+
 function OnboardingCaseStudyContent({
   example,
   pageId,
@@ -1236,8 +1498,9 @@ function OnboardingCaseStudyContent({
   const isTitleReveal = pageId === "title-reveal";
   const isDesignProcess = pageId === "design-process";
   const usesRevealLayout = isTitleReveal || isDesignProcess;
-  const pageLabel = "Case study";
   const showFaded = isTitleReveal && structureFaded;
+  const padX = CASE_STUDY_FRAME.paddingX;
+  const padY = CASE_STUDY_FRAME.paddingY;
   const fadedContent = [
     "transition-[opacity,filter] duration-500 ease-out will-change-[opacity,filter]",
     showFaded
@@ -1246,21 +1509,21 @@ function OnboardingCaseStudyContent({
   ].join(" ");
 
   return (
-    <article className="min-w-0 flex-1 bg-white">
+    <article
+      className="min-w-0 flex-1 bg-white"
+      style={{ maxWidth: CASE_STUDY_FRAME.width, marginInline: "auto" }}
+    >
       {usesRevealLayout ? null : (
         <header
           className="border-b border-black/5"
           style={{
-            paddingLeft: CASE_STUDY_FRAME.paddingX,
-            paddingRight: CASE_STUDY_FRAME.paddingX,
-            paddingTop: CASE_STUDY_FRAME.paddingY,
+            paddingLeft: padX,
+            paddingRight: padX,
+            paddingTop: padY,
             paddingBottom: 40,
           }}
         >
-          <p className="text-[13px] font-medium tracking-wide text-muted-foreground uppercase">
-            {pageLabel}
-          </p>
-          <h1 className="mt-2 text-[2rem] leading-tight font-semibold tracking-tight text-foreground sm:text-[2.5rem]">
+          <h1 className="text-[2rem] leading-tight font-semibold tracking-tight text-foreground sm:text-[2.5rem]">
             {example.title}
           </h1>
           <p className="mt-3 max-w-[34em] text-[17px] leading-relaxed text-muted-foreground">
@@ -1271,10 +1534,10 @@ function OnboardingCaseStudyContent({
 
       <div
         style={{
-          paddingLeft: CASE_STUDY_FRAME.paddingX,
-          paddingRight: CASE_STUDY_FRAME.paddingX,
-          paddingTop: usesRevealLayout ? CASE_STUDY_FRAME.paddingY : 48,
-          paddingBottom: usesRevealLayout ? 36 : CASE_STUDY_FRAME.paddingY,
+          paddingLeft: padX,
+          paddingRight: padX,
+          paddingTop: usesRevealLayout ? padY : 48,
+          paddingBottom: usesRevealLayout ? 36 : padY,
         }}
       >
         <div
@@ -1307,7 +1570,6 @@ function OnboardingCaseStudyContent({
                   <OnboardingResearch
                     persona={example.persona}
                     stickyNotes={example.stickyNotes}
-                    compact={usesRevealLayout}
                   />
                 </div>
               ) : null}
@@ -1330,8 +1592,10 @@ function OnboardingCaseStudyContent({
 
 function OnboardingCaseStudy({
   example,
+  compact = false,
 }: {
   example: Extract<CaseStudyExample, { layout: "onboarding" }>;
+  compact?: boolean;
 }) {
   const [activePage, setActivePage] =
     useState<OnboardingPageId>("case-study");
@@ -1344,6 +1608,10 @@ function OnboardingCaseStudy({
       setStructureFaded(false);
     }
   };
+
+  if (compact) {
+    return <OnboardingCaseStudyCompact example={example} />;
+  }
 
   return (
     <div className="relative w-full bg-white">
@@ -1448,19 +1716,21 @@ function OnboardingCaseStudy({
 
 export function CaseStudy({
   activeId = EXAMPLES[0].id,
+  compact = false,
 }: {
   activeId?: string;
+  compact?: boolean;
 }) {
   const example =
     EXAMPLES.find((item) => item.id === activeId) ?? EXAMPLES[0];
 
   if (example.layout === "analytics") {
-    return <AnalyticsCaseStudy example={example} />;
+    return <AnalyticsCaseStudy example={example} compact={compact} />;
   }
 
   if (example.layout === "search") {
-    return <SearchCaseStudy example={example} />;
+    return <SearchCaseStudy example={example} compact={compact} />;
   }
 
-  return <OnboardingCaseStudy example={example} />;
+  return <OnboardingCaseStudy example={example} compact={compact} />;
 }

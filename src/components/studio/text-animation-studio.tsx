@@ -9,6 +9,7 @@ const ANIMATION_PAGES = [
   { id: "design-process", label: "Design Process" },
   { id: "hiring-question", label: "Hiring Question" },
   { id: "three-stories", label: "3 Stories" },
+  { id: "case-studies", label: "Case studies" },
 ] as const;
 
 type AnimationPageId = (typeof ANIMATION_PAGES)[number]["id"];
@@ -259,6 +260,218 @@ function ThreeStoriesScene({ playing }: { playing: boolean }) {
   );
 }
 
+const CASE_STUDY_SECTIONS = [
+  "The Problem",
+  "The Research",
+  "The Solution",
+  "The Outcome",
+] as const;
+
+const CASE_STUDY_CONCEPTS = [
+  {
+    id: "onboarding",
+    designer: "Designer A",
+    heading: "Redesigning the onboarding experience",
+    accent: "bg-[#C0D6FF]",
+    delay: 200,
+    asset: "flow" as const,
+  },
+  {
+    id: "analytics",
+    designer: "Designer B",
+    heading: "Simplifying the analytics dashboard",
+    accent: "bg-[#FF7B5A]",
+    delay: 700,
+    asset: "chart" as const,
+  },
+  {
+    id: "search",
+    designer: "Designer C",
+    heading: "Rethinking marketplace search",
+    accent: "bg-[#F2B8EB]",
+    delay: 1200,
+    asset: "search" as const,
+  },
+] as const;
+
+function WireLine({ widthClass }: { widthClass: string }) {
+  return (
+    <div
+      className={`h-2 rounded-full bg-[#1E053A]/12 ${widthClass}`}
+      aria-hidden
+    />
+  );
+}
+
+function WireframeCopy({ lines = 3 }: { lines?: number }) {
+  const widths = ["w-[92%]", "w-[78%]", "w-[86%]", "w-[64%]"];
+  return (
+    <div className="space-y-2" aria-hidden>
+      {widths.slice(0, lines).map((widthClass) => (
+        <WireLine key={widthClass} widthClass={widthClass} />
+      ))}
+    </div>
+  );
+}
+
+function CaseStudyAsset({ kind }: { kind: "flow" | "chart" | "search" }) {
+  if (kind === "flow") {
+    return (
+      <div className="flex items-end justify-between gap-1.5" aria-hidden>
+        {[0, 1, 2].map((index) => (
+          <div
+            key={index}
+            className="flex flex-1 flex-col overflow-hidden rounded-[10px] border border-[#1E053A]/10 bg-[#F8F8F6]"
+          >
+            <div className="flex h-3 items-center justify-center bg-[#1E053A]/[0.04]">
+              <div className="h-1 w-5 rounded-full bg-[#1E053A]/15" />
+            </div>
+            <div className="space-y-1 px-1.5 py-2">
+              <div className="h-1 w-6 rounded-full bg-[#1E053A]/15" />
+              <div className="h-1 w-full rounded-full bg-[#1E053A]/10" />
+              <div className="h-1 w-[70%] rounded-full bg-[#1E053A]/10" />
+              <div className="mt-1.5 h-4 rounded-full bg-[#1E053A]/85" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (kind === "chart") {
+    return (
+      <div
+        className="rounded-[12px] border border-[#1E053A]/10 bg-[#F8F8F6] px-2.5 py-2.5"
+        aria-hidden
+      >
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="h-1.5 w-16 rounded-full bg-[#1E053A]/15" />
+          <div className="h-1.5 w-8 rounded-full bg-[#1E053A]/10" />
+        </div>
+        <div className="flex h-16 items-end gap-1.5 px-0.5">
+          {[42, 58, 46, 72, 54, 68, 80].map((height, index) => (
+            <div
+              key={index}
+              className="flex-1 rounded-t-sm bg-[#1E053A]/20"
+              style={{ height: `${height}%` }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="overflow-hidden rounded-[12px] border border-[#1E053A]/10 bg-[#F8F8F6]"
+      aria-hidden
+    >
+      <div className="flex items-center gap-2 border-b border-[#1E053A]/08 px-2.5 py-2">
+        <div className="size-2 rounded-full bg-[#1E053A]/20" />
+        <div className="h-1.5 flex-1 rounded-full bg-[#1E053A]/12" />
+      </div>
+      <div className="space-y-2 px-2.5 py-2.5">
+        {[88, 72, 80].map((width, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <div className="size-5 shrink-0 rounded-md bg-[#1E053A]/10" />
+            <div className="min-w-0 flex-1 space-y-1">
+              <div
+                className="h-1.5 rounded-full bg-[#1E053A]/15"
+                style={{ width: `${width}%` }}
+              />
+              <div className="h-1.5 w-[55%] rounded-full bg-[#1E053A]/10" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CaseStudiesScene({
+  playing,
+  contentFaded,
+}: {
+  playing: boolean;
+  contentFaded: boolean;
+}) {
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
+      <div className="relative z-10 grid w-full max-w-[1100px] grid-cols-3 items-stretch gap-4 sm:gap-5">
+        {CASE_STUDY_CONCEPTS.map((study) => (
+          <div
+            key={study.id}
+            className={`flex h-full flex-col transition-all duration-[700ms] ${
+              playing
+                ? "translate-y-0 opacity-100"
+                : "translate-y-5 opacity-0"
+            }`}
+            style={{
+              transitionDelay: playing ? `${study.delay}ms` : "0ms",
+              transitionTimingFunction: SCENE_EASE,
+            }}
+          >
+            <p className="mb-3 shrink-0 text-center text-[15px] font-medium tracking-[-0.03em] text-[#1E053A] sm:mb-4 sm:text-[16px]">
+              {study.designer}
+            </p>
+
+            <div
+              className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[16px] bg-white transition-[box-shadow] duration-500"
+              style={{
+                boxShadow: playing ? SCENE_CARD_SHADOW : "none",
+              }}
+            >
+              <div
+                className={`${study.accent} flex min-h-[88px] items-center px-5 py-4 sm:min-h-[96px] sm:px-5 sm:py-5`}
+              >
+                <p className="text-[1.05rem] leading-[1.2] font-medium tracking-[-0.03em] text-[#1E053A] sm:text-[1.15rem]">
+                  {study.heading}
+                </p>
+              </div>
+
+              <div
+                className={`flex flex-col px-5 transition-[gap,padding] duration-500 ease-out sm:px-5 ${
+                  contentFaded
+                    ? "gap-4 py-4 sm:gap-4 sm:py-5"
+                    : "gap-6 py-5 sm:gap-7 sm:py-6"
+                }`}
+              >
+                {CASE_STUDY_SECTIONS.map((section) => (
+                  <div key={section} className="space-y-2.5">
+                    <p className="text-[12px] font-medium tracking-[-0.02em] text-[#1E053A] sm:text-[13px]">
+                      {section}
+                    </p>
+                    <div
+                      className={`grid transition-[grid-template-rows,opacity] duration-500 ease-out ${
+                        contentFaded
+                          ? "grid-rows-[0fr] opacity-0"
+                          : "grid-rows-[1fr] opacity-100"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="space-y-2.5 pt-0">
+                          <WireframeCopy lines={2} />
+                          {section === "The Solution" ? (
+                            <div className="pt-1">
+                              <CaseStudyAsset kind={study.asset} />
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <SceneGradient />
+    </div>
+  );
+}
+
 function HiringQuestionScene({ playing }: { playing: boolean }) {
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-start overflow-hidden bg-[#F8F8F6] px-8 pt-[16%] font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12 sm:pt-[14%]">
@@ -395,10 +608,13 @@ export function TextAnimationStudio() {
   const [activePage, setActivePage] =
     useState<AnimationPageId>("classic-framework");
   const [playing, setPlaying] = useState(false);
+  const [contentFaded, setContentFaded] = useState(false);
+  const isCaseStudies = activePage === "case-studies";
 
   const handlePageChange = (pageId: AnimationPageId) => {
     setActivePage(pageId);
     setPlaying(false);
+    setContentFaded(false);
   };
 
   return (
@@ -447,6 +663,20 @@ export function TextAnimationStudio() {
           >
             {playing ? "Reset" : "Play"}
           </button>
+          {isCaseStudies ? (
+            <button
+              type="button"
+              onClick={() => setContentFaded((value) => !value)}
+              aria-pressed={contentFaded}
+              className={`mt-2 w-full rounded-full px-3 py-2 text-left text-[13px] transition-colors ${
+                contentFaded
+                  ? "bg-[#1E053A] font-medium text-white"
+                  : "border border-[#1E053A]/2 bg-transparent font-medium text-[#1E053A] hover:bg-[#1E053A]/05"
+              }`}
+            >
+              {contentFaded ? "Show content" : "Fade content"}
+            </button>
+          ) : null}
         </div>
       </nav>
 
@@ -481,6 +711,20 @@ export function TextAnimationStudio() {
           >
             {playing ? "Reset" : "Play"}
           </button>
+          {isCaseStudies ? (
+            <button
+              type="button"
+              onClick={() => setContentFaded((value) => !value)}
+              aria-pressed={contentFaded}
+              className={`mb-3 rounded-full px-3 py-2 text-[13px] font-medium ${
+                contentFaded
+                  ? "bg-[#1E053A] text-white"
+                  : "border border-[#1E053A]/2 text-[#1E053A]"
+              }`}
+            >
+              {contentFaded ? "Show content" : "Fade content"}
+            </button>
+          ) : null}
         </div>
 
         <RecordingStage>
@@ -495,6 +739,9 @@ export function TextAnimationStudio() {
           ) : null}
           {activePage === "three-stories" ? (
             <ThreeStoriesScene playing={playing} />
+          ) : null}
+          {activePage === "case-studies" ? (
+            <CaseStudiesScene playing={playing} contentFaded={contentFaded} />
           ) : null}
         </RecordingStage>
       </div>
