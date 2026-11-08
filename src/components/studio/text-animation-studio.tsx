@@ -10,6 +10,8 @@ const ANIMATION_PAGES = [
   { id: "hiring-question", label: "Hiring Question" },
   { id: "three-stories", label: "3 Stories" },
   { id: "case-studies", label: "Case studies" },
+  { id: "onboarding-example", label: "Onboarding Example" },
+  { id: "case-study-ideas", label: "Case Study Ideas" },
 ] as const;
 
 type AnimationPageId = (typeof ANIMATION_PAGES)[number]["id"];
@@ -31,6 +33,15 @@ const SCENE_CARD_SHADOW =
   "0 1px 1px rgba(30,5,58,0.03), 0 18px 40px rgba(30,5,58,0.06)";
 const SCENE_SOFT_SHADOW =
   "0 1px 1px rgba(30,5,58,0.03), 0 12px 28px rgba(30,5,58,0.05)";
+
+const FRAMEWORK_CARD_BEAT_MS = 280;
+const FRAMEWORK_CARD_BASE_DELAY_MS = 900;
+const FRAMEWORK_CARD_DURATION_MS = 1100;
+const FRAMEWORK_TITLE_DELAY_MS =
+  FRAMEWORK_CARD_BASE_DELAY_MS +
+  (FRAMEWORK_STEPS.length - 1) * FRAMEWORK_CARD_BEAT_MS +
+  FRAMEWORK_CARD_DURATION_MS +
+  120;
 
 const TIMELINE_COLS = 12;
 
@@ -88,8 +99,7 @@ function FrameworkRow({
       }`}
     >
       {FRAMEWORK_STEPS.map((step, index) => {
-        const beat = 280;
-        const cardDelay = 900 + index * beat;
+        const cardDelay = FRAMEWORK_CARD_BASE_DELAY_MS + index * FRAMEWORK_CARD_BEAT_MS;
         const arrowDelay = cardDelay + 140;
         const show = !animated || playing;
 
@@ -168,20 +178,23 @@ function SceneGradient() {
 
 function FrameworkScene({ playing }: { playing: boolean }) {
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-start overflow-hidden bg-[#F8F8F6] px-8 pt-[16%] font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12 sm:pt-[14%]">
-      <div className="relative z-10 max-w-[720px] text-center">
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
+      <div className="relative z-10 w-full max-w-[1040px]">
         <p
-          className={`${SCENE_TITLE_CLASS} transition-all duration-[1200ms] ${
+          className={`absolute inset-x-0 bottom-full mb-10 text-center ${SCENE_TITLE_CLASS} transition-all duration-[1200ms] sm:mb-12 ${
             playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
           }`}
-          style={{ transitionTimingFunction: SCENE_EASE }}
+          style={{
+            transitionDelay: playing ? `${FRAMEWORK_TITLE_DELAY_MS}ms` : "0ms",
+            transitionTimingFunction: SCENE_EASE,
+          }}
         >
           The classic framework
         </p>
-      </div>
 
-      <div className="relative z-10 mt-14 flex w-full justify-center sm:mt-16">
-        <FrameworkRow animated playing={playing} />
+        <div className="flex w-full justify-center">
+          <FrameworkRow animated playing={playing} />
+        </div>
       </div>
 
       <SceneGradient />
@@ -388,6 +401,90 @@ function CaseStudyAsset({ kind }: { kind: "flow" | "chart" | "search" }) {
   );
 }
 
+function CaseStudyCard({
+  study,
+  playing,
+  contentFaded,
+  showDesigner = true,
+}: {
+  study: (typeof CASE_STUDY_CONCEPTS)[number];
+  playing: boolean;
+  contentFaded: boolean;
+  showDesigner?: boolean;
+}) {
+  return (
+    <div
+      className={`flex h-full flex-col transition-all duration-[700ms] ${
+        playing ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+      }`}
+      style={{
+        transitionDelay: playing ? `${study.delay}ms` : "0ms",
+        transitionTimingFunction: SCENE_EASE,
+      }}
+    >
+      {showDesigner ? (
+        <p className="mb-3 shrink-0 text-center text-[15px] font-medium tracking-[-0.03em] text-[#1E053A] sm:mb-4 sm:text-[16px]">
+          {study.designer}
+        </p>
+      ) : (
+        <div
+          className="mb-3 h-[23px] shrink-0 sm:mb-4 sm:h-[24px]"
+          aria-hidden
+        />
+      )}
+
+      <div
+        className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[16px] bg-white transition-[box-shadow] duration-500"
+        style={{
+          boxShadow: playing ? SCENE_CARD_SHADOW : "none",
+        }}
+      >
+        <div
+          className={`${study.accent} flex min-h-[88px] items-center px-5 py-4 sm:min-h-[96px] sm:px-5 sm:py-5`}
+        >
+          <p className="text-[1.05rem] leading-[1.2] font-medium tracking-[-0.03em] text-[#1E053A] sm:text-[1.15rem]">
+            {study.heading}
+          </p>
+        </div>
+
+        <div
+          className={`flex flex-col px-5 transition-[gap,padding] duration-500 ease-out sm:px-5 ${
+            contentFaded
+              ? "gap-4 py-4 sm:gap-4 sm:py-5"
+              : "gap-6 py-5 sm:gap-7 sm:py-6"
+          }`}
+        >
+          {CASE_STUDY_SECTIONS.map((section) => (
+            <div key={section} className="space-y-2.5">
+              <p className="text-[12px] font-medium tracking-[-0.02em] text-[#1E053A] sm:text-[13px]">
+                {section}
+              </p>
+              <div
+                className={`grid transition-[grid-template-rows,opacity] duration-500 ease-out ${
+                  contentFaded
+                    ? "grid-rows-[0fr] opacity-0"
+                    : "grid-rows-[1fr] opacity-100"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="space-y-2.5 pt-0">
+                    <WireframeCopy lines={2} />
+                    {section === "The Solution" ? (
+                      <div className="pt-1">
+                        <CaseStudyAsset kind={study.asset} />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CaseStudiesScene({
   playing,
   contentFaded,
@@ -397,74 +494,273 @@ function CaseStudiesScene({
 }) {
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
-      <div className="relative z-10 grid w-full max-w-[1100px] grid-cols-3 items-stretch gap-4 sm:gap-5">
+      <div className="relative z-10 grid w-full max-w-[1100px] grid-cols-3 items-stretch gap-6 sm:gap-8">
         {CASE_STUDY_CONCEPTS.map((study) => (
-          <div
+          <CaseStudyCard
             key={study.id}
-            className={`flex h-full flex-col transition-all duration-[700ms] ${
-              playing
-                ? "translate-y-0 opacity-100"
-                : "translate-y-5 opacity-0"
+            study={study}
+            playing={playing}
+            contentFaded={contentFaded}
+          />
+        ))}
+      </div>
+
+      <SceneGradient />
+    </div>
+  );
+}
+
+function OnboardingExampleScene({
+  playing,
+  contentFaded,
+}: {
+  playing: boolean;
+  contentFaded: boolean;
+}) {
+  const study = CASE_STUDY_CONCEPTS[0];
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
+      <div className="relative z-10 grid w-full max-w-[1100px] grid-cols-3 items-stretch gap-6 sm:gap-8">
+        <div aria-hidden />
+        <CaseStudyCard
+          study={study}
+          playing={playing}
+          contentFaded={contentFaded}
+          showDesigner={false}
+        />
+        <div aria-hidden />
+      </div>
+
+      <SceneGradient />
+    </div>
+  );
+}
+
+const ONBOARDING_FLOW_TOP = [
+  {
+    label: "Users abandoning onboarding",
+    heading: "Friction",
+    tone: "bg-[#FF7B5A]",
+    delay: 900,
+  },
+  {
+    label: "Business needs this info",
+    heading: "Requirement",
+    tone: "bg-[#C0D6FF]",
+    delay: 1900,
+  },
+] as const;
+
+const ONBOARDING_FLOW_DECISIONS = [
+  {
+    label: "What info is needed?",
+    tone: "bg-[#F2B8EB]",
+    delay: 2900,
+  },
+  {
+    label: "What if business doesn't get this info?",
+    tone: "bg-[#F4AF2C]",
+    delay: 3900,
+  },
+  {
+    label: "How did you decide trade-offs?",
+    tone: "bg-[#D9C2FF]",
+    delay: 4900,
+  },
+] as const;
+
+function FlowNode({
+  label,
+  heading,
+  tone,
+  delay,
+  playing,
+  className = "",
+}: {
+  label: string;
+  heading?: string;
+  tone: string;
+  delay: number;
+  playing: boolean;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`flex flex-col overflow-hidden rounded-[16px] transition-all duration-[1400ms] ${className} ${
+        playing ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+      }`}
+      style={{
+        boxShadow: playing ? SCENE_CARD_SHADOW : "none",
+        transitionDelay: playing ? `${delay}ms` : "0ms",
+        transitionTimingFunction: SCENE_EASE,
+      }}
+    >
+      {heading ? (
+        <div className="bg-[#1E053A] px-6 py-3 text-center sm:px-7">
+          <p className="text-[15px] font-medium tracking-[-0.03em] text-white sm:text-[16px]">
+            {heading}
+          </p>
+        </div>
+      ) : null}
+      <div
+        className={`${tone} flex flex-1 items-center justify-center px-6 py-7 text-center sm:px-7 sm:py-8`}
+      >
+        <p className={SCENE_CARD_TEXT}>{label}</p>
+      </div>
+    </div>
+  );
+}
+
+function FlowArrow({
+  playing,
+  delay,
+  direction = "right",
+  length = 48,
+  className = "",
+}: {
+  playing: boolean;
+  delay: number;
+  direction?: "right" | "down";
+  length?: number;
+  className?: string;
+}) {
+  const isDown = direction === "down";
+  const head = 9;
+  const width = isDown ? 16 : length;
+  const height = isDown ? length : 16;
+  const mid = isDown ? width / 2 : height / 2;
+  const color = "#1E053A";
+
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      fill="none"
+      className={`shrink-0 transition-all duration-[1400ms] ${className} ${
+        playing ? "opacity-100" : "opacity-0"
+      }`}
+      style={{
+        transitionDelay: playing ? `${delay}ms` : "0ms",
+        transitionTimingFunction: SCENE_EASE,
+      }}
+      aria-hidden
+    >
+      {isDown ? (
+        <>
+          <path
+            d={`M ${mid} 0 L ${mid} ${height - head}`}
+            stroke={color}
+            strokeWidth="2"
+          />
+          <path
+            d={`M ${mid - 5.5} ${height - head} L ${mid} ${height - 1} L ${mid + 5.5} ${height - head} Z`}
+            fill={color}
+          />
+        </>
+      ) : (
+        <>
+          <path
+            d={`M 0 ${mid} L ${width - head} ${mid}`}
+            stroke={color}
+            strokeWidth="2"
+          />
+          <path
+            d={`M ${width - head} ${mid - 5.5} L ${width - 1} ${mid} L ${width - head} ${mid + 5.5} Z`}
+            fill={color}
+          />
+        </>
+      )}
+    </svg>
+  );
+}
+
+function CaseStudyIdeasScene({ playing }: { playing: boolean }) {
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
+      <div className="relative z-10 flex w-full max-w-[1040px] flex-col items-center">
+        <p
+          className={`${SCENE_TITLE_CLASS} text-center transition-all duration-[1200ms] ${
+            playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+          }`}
+          style={{ transitionTimingFunction: SCENE_EASE }}
+        >
+          Onboarding project
+        </p>
+
+        <div className="mt-8 flex w-full max-w-[900px] items-stretch justify-center sm:mt-10">
+          <FlowNode
+            {...ONBOARDING_FLOW_TOP[0]}
+            playing={playing}
+            className="min-h-[148px] w-full max-w-[380px] flex-1"
+          />
+          <FlowArrow playing={playing} delay={1400} length={56} />
+          <FlowNode
+            {...ONBOARDING_FLOW_TOP[1]}
+            playing={playing}
+            className="min-h-[148px] w-full max-w-[380px] flex-1"
+          />
+        </div>
+
+        <FlowArrow
+          playing={playing}
+          delay={2400}
+          direction="down"
+          length={36}
+        />
+
+        <p
+          className={`${SCENE_CARD_TEXT} transition-all duration-[1400ms] ${
+            playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+          }`}
+          style={{
+            transitionDelay: playing ? "2400ms" : "0ms",
+            transitionTimingFunction: SCENE_EASE,
+          }}
+        >
+          Decisions?
+        </p>
+
+        <div className="relative mt-1 grid w-full grid-cols-3 items-stretch gap-5">
+          <div
+            className={`pointer-events-none absolute top-0 right-[16.666%] left-[16.666%] h-0.5 bg-[#1E053A] transition-all duration-[1400ms] ${
+              playing ? "opacity-100" : "opacity-0"
             }`}
             style={{
-              transitionDelay: playing ? `${study.delay}ms` : "0ms",
+              transitionDelay: playing ? "2600ms" : "0ms",
               transitionTimingFunction: SCENE_EASE,
             }}
-          >
-            <p className="mb-3 shrink-0 text-center text-[15px] font-medium tracking-[-0.03em] text-[#1E053A] sm:mb-4 sm:text-[16px]">
-              {study.designer}
-            </p>
+            aria-hidden
+          />
+          <div
+            className={`pointer-events-none absolute -top-3 left-1/2 h-3 w-0.5 -translate-x-1/2 bg-[#1E053A] transition-all duration-[1400ms] ${
+              playing ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              transitionDelay: playing ? "2600ms" : "0ms",
+              transitionTimingFunction: SCENE_EASE,
+            }}
+            aria-hidden
+          />
 
-            <div
-              className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[16px] bg-white transition-[box-shadow] duration-500"
-              style={{
-                boxShadow: playing ? SCENE_CARD_SHADOW : "none",
-              }}
-            >
-              <div
-                className={`${study.accent} flex min-h-[88px] items-center px-5 py-4 sm:min-h-[96px] sm:px-5 sm:py-5`}
-              >
-                <p className="text-[1.05rem] leading-[1.2] font-medium tracking-[-0.03em] text-[#1E053A] sm:text-[1.15rem]">
-                  {study.heading}
-                </p>
-              </div>
-
-              <div
-                className={`flex flex-col px-5 transition-[gap,padding] duration-500 ease-out sm:px-5 ${
-                  contentFaded
-                    ? "gap-4 py-4 sm:gap-4 sm:py-5"
-                    : "gap-6 py-5 sm:gap-7 sm:py-6"
-                }`}
-              >
-                {CASE_STUDY_SECTIONS.map((section) => (
-                  <div key={section} className="space-y-2.5">
-                    <p className="text-[12px] font-medium tracking-[-0.02em] text-[#1E053A] sm:text-[13px]">
-                      {section}
-                    </p>
-                    <div
-                      className={`grid transition-[grid-template-rows,opacity] duration-500 ease-out ${
-                        contentFaded
-                          ? "grid-rows-[0fr] opacity-0"
-                          : "grid-rows-[1fr] opacity-100"
-                      }`}
-                    >
-                      <div className="overflow-hidden">
-                        <div className="space-y-2.5 pt-0">
-                          <WireframeCopy lines={2} />
-                          {section === "The Solution" ? (
-                            <div className="pt-1">
-                              <CaseStudyAsset kind={study.asset} />
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {ONBOARDING_FLOW_DECISIONS.map((node) => (
+            <div key={node.label} className="flex min-h-0 flex-col">
+              <FlowArrow
+                playing={playing}
+                delay={node.delay - 200}
+                direction="down"
+                length={32}
+                className="self-center"
+              />
+              <FlowNode
+                {...node}
+                playing={playing}
+                className="min-h-[132px] w-full flex-1"
+              />
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <SceneGradient />
@@ -609,7 +905,8 @@ export function TextAnimationStudio() {
     useState<AnimationPageId>("classic-framework");
   const [playing, setPlaying] = useState(false);
   const [contentFaded, setContentFaded] = useState(false);
-  const isCaseStudies = activePage === "case-studies";
+  const supportsContentFade =
+    activePage === "case-studies" || activePage === "onboarding-example";
 
   const handlePageChange = (pageId: AnimationPageId) => {
     setActivePage(pageId);
@@ -663,7 +960,7 @@ export function TextAnimationStudio() {
           >
             {playing ? "Reset" : "Play"}
           </button>
-          {isCaseStudies ? (
+          {supportsContentFade ? (
             <button
               type="button"
               onClick={() => setContentFaded((value) => !value)}
@@ -711,7 +1008,7 @@ export function TextAnimationStudio() {
           >
             {playing ? "Reset" : "Play"}
           </button>
-          {isCaseStudies ? (
+          {supportsContentFade ? (
             <button
               type="button"
               onClick={() => setContentFaded((value) => !value)}
@@ -742,6 +1039,15 @@ export function TextAnimationStudio() {
           ) : null}
           {activePage === "case-studies" ? (
             <CaseStudiesScene playing={playing} contentFaded={contentFaded} />
+          ) : null}
+          {activePage === "onboarding-example" ? (
+            <OnboardingExampleScene
+              playing={playing}
+              contentFaded={contentFaded}
+            />
+          ) : null}
+          {activePage === "case-study-ideas" ? (
+            <CaseStudyIdeasScene playing={playing} />
           ) : null}
         </RecordingStage>
       </div>
