@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { RecordingStage } from "@/components/studio/recording-stage";
 
 const ANIMATION_PAGES = [
@@ -12,9 +12,39 @@ const ANIMATION_PAGES = [
   { id: "case-studies", label: "Case studies" },
   { id: "onboarding-example", label: "Onboarding Example" },
   { id: "case-study-ideas", label: "Case Study Ideas" },
+  { id: "sections", label: "Sections" },
 ] as const;
 
 type AnimationPageId = (typeof ANIMATION_PAGES)[number]["id"];
+
+const SECTION_TABS = [
+  {
+    id: "1",
+    label: "Section 1",
+    title: "Mistake 1",
+    subtitle: "Letting the framework dictate your story",
+  },
+  {
+    id: "2",
+    label: "Section 2",
+    title: "Section 2",
+    subtitle: "",
+  },
+  {
+    id: "3",
+    label: "Section 3",
+    title: "Section 3",
+    subtitle: "",
+  },
+  {
+    id: "4",
+    label: "Section 4",
+    title: "Section 4",
+    subtitle: "",
+  },
+] as const;
+
+type SectionTabId = (typeof SECTION_TABS)[number]["id"];
 
 const FRAMEWORK_STEPS = [
   { label: "Problem", tone: "bg-[#FF7B5A]" },
@@ -597,89 +627,56 @@ function FlowNode({
       }}
     >
       {heading ? (
-        <div className="bg-[#1E053A] px-6 py-3 text-center sm:px-7">
-          <p className="text-[15px] font-medium tracking-[-0.03em] text-white sm:text-[16px]">
+        <div className="bg-[#1E053A] px-5 py-2 text-center sm:px-6">
+          <p className="text-[13px] font-medium tracking-[-0.02em] text-white sm:text-[14px]">
             {heading}
           </p>
         </div>
       ) : null}
       <div
-        className={`${tone} flex flex-1 items-center justify-center px-6 py-7 text-center sm:px-7 sm:py-8`}
+        className={`${tone} flex flex-1 items-center justify-center px-5 py-4 text-center sm:px-6 sm:py-5`}
       >
-        <p className={SCENE_CARD_TEXT}>{label}</p>
+        <p className="text-[1.1rem] leading-[1.25] font-medium tracking-[-0.03em] text-[#1E053A] sm:text-[1.2rem]">
+          {label}
+        </p>
       </div>
     </div>
   );
 }
 
-function FlowArrow({
+function FlowLink({
   playing,
   delay,
   direction = "right",
-  length = 48,
   className = "",
 }: {
   playing: boolean;
   delay: number;
   direction?: "right" | "down";
-  length?: number;
   className?: string;
 }) {
-  const isDown = direction === "down";
-  const head = 9;
-  const width = isDown ? 16 : length;
-  const height = isDown ? length : 16;
-  const mid = isDown ? width / 2 : height / 2;
-  const color = "#1E053A";
+  const Icon = direction === "down" ? ArrowDown : ArrowRight;
 
   return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      fill="none"
-      className={`shrink-0 transition-all duration-[1400ms] ${className} ${
-        playing ? "opacity-100" : "opacity-0"
-      }`}
+    <div
+      className={`flex shrink-0 items-center justify-center transition-all duration-[1400ms] ${
+        direction === "down" ? "h-8 w-full" : "mx-4 w-10 sm:mx-5 sm:w-12"
+      } ${playing ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"} ${className}`}
       style={{
         transitionDelay: playing ? `${delay}ms` : "0ms",
         transitionTimingFunction: SCENE_EASE,
       }}
       aria-hidden
     >
-      {isDown ? (
-        <>
-          <path
-            d={`M ${mid} 0 L ${mid} ${height - head}`}
-            stroke={color}
-            strokeWidth="2"
-          />
-          <path
-            d={`M ${mid - 5.5} ${height - head} L ${mid} ${height - 1} L ${mid + 5.5} ${height - head} Z`}
-            fill={color}
-          />
-        </>
-      ) : (
-        <>
-          <path
-            d={`M 0 ${mid} L ${width - head} ${mid}`}
-            stroke={color}
-            strokeWidth="2"
-          />
-          <path
-            d={`M ${width - head} ${mid - 5.5} L ${width - 1} ${mid} L ${width - head} ${mid + 5.5} Z`}
-            fill={color}
-          />
-        </>
-      )}
-    </svg>
+      <Icon className="size-6 text-[#1E053A]" strokeWidth={2.25} />
+    </div>
   );
 }
 
 function CaseStudyIdeasScene({ playing }: { playing: boolean }) {
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
-      <div className="relative z-10 flex w-full max-w-[1040px] flex-col items-center">
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-10 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-14">
+      <div className="relative z-10 flex w-full max-w-[700px] flex-col items-center">
         <p
           className={`${SCENE_TITLE_CLASS} text-center transition-all duration-[1200ms] ${
             playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
@@ -689,29 +686,24 @@ function CaseStudyIdeasScene({ playing }: { playing: boolean }) {
           Onboarding project
         </p>
 
-        <div className="mt-8 flex w-full max-w-[900px] items-stretch justify-center sm:mt-10">
+        <div className="mt-5 flex w-full items-stretch justify-center">
           <FlowNode
             {...ONBOARDING_FLOW_TOP[0]}
             playing={playing}
-            className="min-h-[148px] w-full max-w-[380px] flex-1"
+            className="w-full flex-1"
           />
-          <FlowArrow playing={playing} delay={1400} length={56} />
+          <FlowLink playing={playing} delay={1400} />
           <FlowNode
             {...ONBOARDING_FLOW_TOP[1]}
             playing={playing}
-            className="min-h-[148px] w-full max-w-[380px] flex-1"
+            className="w-full flex-1"
           />
         </div>
 
-        <FlowArrow
-          playing={playing}
-          delay={2400}
-          direction="down"
-          length={36}
-        />
+        <FlowLink playing={playing} delay={2400} direction="down" />
 
         <p
-          className={`${SCENE_CARD_TEXT} transition-all duration-[1400ms] ${
+          className={`text-[1.2rem] font-medium tracking-[-0.03em] transition-all duration-[1400ms] sm:text-[1.3rem] ${
             playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
           }`}
           style={{
@@ -722,20 +714,10 @@ function CaseStudyIdeasScene({ playing }: { playing: boolean }) {
           Decisions?
         </p>
 
-        <div className="relative mt-1 grid w-full grid-cols-3 items-stretch gap-5">
+        <div className="relative mt-4 w-full pl-11">
           <div
-            className={`pointer-events-none absolute top-0 right-[16.666%] left-[16.666%] h-0.5 bg-[#1E053A] transition-all duration-[1400ms] ${
-              playing ? "opacity-100" : "opacity-0"
-            }`}
-            style={{
-              transitionDelay: playing ? "2600ms" : "0ms",
-              transitionTimingFunction: SCENE_EASE,
-            }}
-            aria-hidden
-          />
-          <div
-            className={`pointer-events-none absolute -top-3 left-1/2 h-3 w-0.5 -translate-x-1/2 bg-[#1E053A] transition-all duration-[1400ms] ${
-              playing ? "opacity-100" : "opacity-0"
+            className={`absolute top-0 bottom-4 left-4 w-[2px] origin-top bg-[#1E053A] transition-all duration-[1400ms] ${
+              playing ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
             style={{
               transitionDelay: playing ? "2600ms" : "0ms",
@@ -744,22 +726,26 @@ function CaseStudyIdeasScene({ playing }: { playing: boolean }) {
             aria-hidden
           />
 
-          {ONBOARDING_FLOW_DECISIONS.map((node) => (
-            <div key={node.label} className="flex min-h-0 flex-col">
-              <FlowArrow
-                playing={playing}
-                delay={node.delay - 200}
-                direction="down"
-                length={32}
-                className="self-center"
-              />
-              <FlowNode
-                {...node}
-                playing={playing}
-                className="min-h-[132px] w-full flex-1"
-              />
-            </div>
-          ))}
+          <div className="flex flex-col gap-5">
+            {ONBOARDING_FLOW_DECISIONS.map((node) => (
+              <div key={node.label} className="relative">
+                <div
+                  className={`absolute top-1/2 left-[-28px] flex -translate-y-1/2 items-center transition-all duration-[1400ms] ${
+                    playing ? "opacity-100" : "opacity-0"
+                  }`}
+                  style={{
+                    transitionDelay: playing ? `${node.delay - 200}ms` : "0ms",
+                    transitionTimingFunction: SCENE_EASE,
+                  }}
+                  aria-hidden
+                >
+                  <div className="size-2 shrink-0 rounded-full bg-[#1E053A]" />
+                  <div className="h-[2px] w-5 bg-[#1E053A]" />
+                </div>
+                <FlowNode {...node} playing={playing} className="w-full" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -900,18 +886,109 @@ function DesignProcessScene({ playing }: { playing: boolean }) {
   );
 }
 
+function SectionsScene({
+  activeSection,
+  playing,
+}: {
+  activeSection: SectionTabId;
+  playing: boolean;
+}) {
+  const section = SECTION_TABS.find((tab) => tab.id === activeSection)!;
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
+      <div className="relative z-10 flex w-full max-w-[820px] flex-col items-center text-center">
+        <p
+          className={`${SCENE_TITLE_CLASS} transition-all duration-[1200ms] ${
+            playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+          }`}
+          style={{ transitionTimingFunction: SCENE_EASE }}
+        >
+          {section.title}
+        </p>
+        {section.subtitle ? (
+          <p
+            className={`${SCENE_TITLE_CLASS} mt-2 text-[#1E053A]/55 transition-all duration-[1200ms] ${
+              playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+            }`}
+            style={{
+              transitionDelay: playing ? "280ms" : "0ms",
+              transitionTimingFunction: SCENE_EASE,
+            }}
+          >
+            {section.subtitle}
+          </p>
+        ) : null}
+      </div>
+
+      <SceneGradient />
+    </div>
+  );
+}
+
+function SectionTabs({
+  activeId,
+  onChange,
+}: {
+  activeId: SectionTabId;
+  onChange: (id: SectionTabId) => void;
+}) {
+  return (
+    <div
+      className="inline-flex rounded-[10px] bg-[#EBEBEF] p-1"
+      role="tablist"
+      aria-label="Sections"
+    >
+      {SECTION_TABS.map((tab) => {
+        const active = tab.id === activeId;
+        return (
+          <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(tab.id)}
+            className={`rounded-[8px] px-3.5 py-1.5 text-[13px] font-medium transition-all ${
+              active
+                ? "bg-white text-[#1C1C1E] shadow-[0_1px_2px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)]"
+                : "text-[#636366] hover:text-[#1C1C1E]"
+            }`}
+          >
+            {tab.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export function TextAnimationStudio() {
   const [activePage, setActivePage] =
     useState<AnimationPageId>("classic-framework");
+  const [activeSection, setActiveSection] = useState<SectionTabId>("1");
   const [playing, setPlaying] = useState(false);
   const [contentFaded, setContentFaded] = useState(false);
   const supportsContentFade =
     activePage === "case-studies" || activePage === "onboarding-example";
+  const showSectionTabs = activePage === "sections";
 
   const handlePageChange = (pageId: AnimationPageId) => {
     setActivePage(pageId);
     setPlaying(false);
     setContentFaded(false);
+    if (pageId === "sections") {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setPlaying(true));
+      });
+    }
+  };
+
+  const handleSectionChange = (sectionId: SectionTabId) => {
+    setActiveSection(sectionId);
+    setPlaying(false);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setPlaying(true));
+    });
   };
 
   return (
@@ -1024,32 +1101,55 @@ export function TextAnimationStudio() {
           ) : null}
         </div>
 
-        <RecordingStage>
-          {activePage === "classic-framework" ? (
-            <FrameworkScene playing={playing} />
+        <div className="flex h-[calc(100dvh-57px)] flex-col">
+          {showSectionTabs ? (
+            <div className="flex shrink-0 justify-center px-4 pt-4 pb-1 sm:px-6">
+              <SectionTabs
+                activeId={activeSection}
+                onChange={handleSectionChange}
+              />
+            </div>
           ) : null}
-          {activePage === "design-process" ? (
-            <DesignProcessScene playing={playing} />
-          ) : null}
-          {activePage === "hiring-question" ? (
-            <HiringQuestionScene playing={playing} />
-          ) : null}
-          {activePage === "three-stories" ? (
-            <ThreeStoriesScene playing={playing} />
-          ) : null}
-          {activePage === "case-studies" ? (
-            <CaseStudiesScene playing={playing} contentFaded={contentFaded} />
-          ) : null}
-          {activePage === "onboarding-example" ? (
-            <OnboardingExampleScene
-              playing={playing}
-              contentFaded={contentFaded}
-            />
-          ) : null}
-          {activePage === "case-study-ideas" ? (
-            <CaseStudyIdeasScene playing={playing} />
-          ) : null}
-        </RecordingStage>
+
+          <div className="min-h-0 flex-1">
+            <RecordingStage>
+              {activePage === "classic-framework" ? (
+                <FrameworkScene playing={playing} />
+              ) : null}
+              {activePage === "design-process" ? (
+                <DesignProcessScene playing={playing} />
+              ) : null}
+              {activePage === "hiring-question" ? (
+                <HiringQuestionScene playing={playing} />
+              ) : null}
+              {activePage === "three-stories" ? (
+                <ThreeStoriesScene playing={playing} />
+              ) : null}
+              {activePage === "case-studies" ? (
+                <CaseStudiesScene
+                  playing={playing}
+                  contentFaded={contentFaded}
+                />
+              ) : null}
+              {activePage === "onboarding-example" ? (
+                <OnboardingExampleScene
+                  playing={playing}
+                  contentFaded={contentFaded}
+                />
+              ) : null}
+              {activePage === "case-study-ideas" ? (
+                <CaseStudyIdeasScene playing={playing} />
+              ) : null}
+              {activePage === "sections" ? (
+                <SectionsScene
+                  key={activeSection}
+                  activeSection={activeSection}
+                  playing={playing}
+                />
+              ) : null}
+            </RecordingStage>
+          </div>
+        </div>
       </div>
     </div>
   );

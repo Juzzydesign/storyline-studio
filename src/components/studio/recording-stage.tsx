@@ -9,13 +9,13 @@ export const YOUTUBE_RECORDING = {
 
 export function RecordingStage({ children }: { children?: React.ReactNode }) {
   return (
-    <div className="flex h-full min-h-[calc(100dvh-57px)] flex-col items-center justify-center gap-3 bg-[#F8F8F6] px-4 py-6 sm:px-6">
+    <div className="flex h-full min-h-0 flex-col items-center justify-center gap-3 bg-[#F8F8F6] px-4 py-5 sm:px-6">
       <div
         className="relative w-full overflow-hidden bg-[#F8F8F6] shadow-[0_8px_40px_rgba(30,5,58,0.08)] ring-1 ring-[#1E053A]/08"
         style={{
           aspectRatio: `${YOUTUBE_RECORDING.width} / ${YOUTUBE_RECORDING.height}`,
-          maxWidth: "min(100%, calc((100dvh - 120px) * 16 / 9))",
-          maxHeight: "calc(100dvh - 120px)",
+          maxWidth: "min(100%, calc((100dvh - 140px) * 16 / 9))",
+          maxHeight: "calc(100dvh - 140px)",
         }}
         data-recording-canvas
       >
