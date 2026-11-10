@@ -27,20 +27,20 @@ const SECTION_TABS = [
   {
     id: "2",
     label: "Section 2",
-    title: "Section 2",
-    subtitle: "",
+    title: "Mistake 2",
+    subtitle: "Overlooking the stories inside the project",
   },
   {
     id: "3",
     label: "Section 3",
-    title: "Section 3",
-    subtitle: "",
+    title: "Mistake 3",
+    subtitle: "Showing activities instead of decisions",
   },
   {
     id: "4",
     label: "Section 4",
-    title: "Section 4",
-    subtitle: "",
+    title: "Mistake 4",
+    subtitle: "Titles that hide the value",
   },
 ] as const;
 
@@ -367,13 +367,13 @@ function CaseStudyAsset({ kind }: { kind: "flow" | "chart" | "search" }) {
             className="flex flex-1 flex-col overflow-hidden rounded-[10px] border border-[#1E053A]/10 bg-[#F8F8F6]"
           >
             <div className="flex h-3 items-center justify-center bg-[#1E053A]/[0.04]">
-              <div className="h-1 w-5 rounded-full bg-[#1E053A]/15" />
+              <div className="h-1 w-5 rounded-full bg-[#1E053A]/12" />
             </div>
             <div className="space-y-1 px-1.5 py-2">
-              <div className="h-1 w-6 rounded-full bg-[#1E053A]/15" />
+              <div className="h-1 w-6 rounded-full bg-[#1E053A]/12" />
               <div className="h-1 w-full rounded-full bg-[#1E053A]/10" />
               <div className="h-1 w-[70%] rounded-full bg-[#1E053A]/10" />
-              <div className="mt-1.5 h-4 rounded-full bg-[#1E053A]/85" />
+              <div className="mt-1.5 h-4 rounded-full bg-[#1E053A]/20" />
             </div>
           </div>
         ))}
@@ -388,7 +388,7 @@ function CaseStudyAsset({ kind }: { kind: "flow" | "chart" | "search" }) {
         aria-hidden
       >
         <div className="mb-2 flex items-center justify-between gap-3">
-          <div className="h-1.5 w-16 rounded-full bg-[#1E053A]/15" />
+          <div className="h-1.5 w-16 rounded-full bg-[#1E053A]/12" />
           <div className="h-1.5 w-8 rounded-full bg-[#1E053A]/10" />
         </div>
         <div className="flex h-16 items-end gap-1.5 px-0.5">
@@ -419,7 +419,7 @@ function CaseStudyAsset({ kind }: { kind: "flow" | "chart" | "search" }) {
             <div className="size-5 shrink-0 rounded-md bg-[#1E053A]/10" />
             <div className="min-w-0 flex-1 space-y-1">
               <div
-                className="h-1.5 rounded-full bg-[#1E053A]/15"
+                className="h-1.5 rounded-full bg-[#1E053A]/12"
                 style={{ width: `${width}%` }}
               />
               <div className="h-1.5 w-[55%] rounded-full bg-[#1E053A]/10" />
@@ -808,8 +808,8 @@ const TIMELINE_TITLE_DELAY_MS =
 
 function DesignProcessScene({ playing }: { playing: boolean }) {
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-start overflow-hidden bg-[#F8F8F6] px-6 pt-[16%] font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-10 sm:pt-[14%]">
-      <div className="relative z-10 w-full max-w-[1040px]">
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-6 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-10">
+      <div className="relative z-10 w-full max-w-[1100px]">
         <p
           className={`absolute inset-x-0 bottom-full mb-10 text-center ${SCENE_TITLE_CLASS} transition-all duration-[1200ms] sm:mb-12 ${
             playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
@@ -836,7 +836,7 @@ function DesignProcessScene({ playing }: { playing: boolean }) {
             {Array.from({ length: TIMELINE_COLS }, (_, index) => (
               <div
                 key={index}
-                className="border-l border-dashed border-[#1E053A]/10 first:border-l-0"
+                className="border-l-2 border-dashed border-[#1E053A]/18 first:border-l-0"
                 style={{
                   transform: playing ? "scaleY(1)" : "scaleY(0)",
                   transformOrigin: "top",
@@ -850,7 +850,7 @@ function DesignProcessScene({ playing }: { playing: boolean }) {
           </div>
 
           <div
-            className="relative grid gap-y-4"
+            className="relative grid gap-y-5 sm:gap-y-6"
             style={{
               gridTemplateColumns: `repeat(${TIMELINE_COLS}, minmax(0, 1fr))`,
               gridTemplateRows: `repeat(${TIMELINE_BARS.length}, minmax(0, auto))`,
@@ -859,7 +859,7 @@ function DesignProcessScene({ playing }: { playing: boolean }) {
             {TIMELINE_BARS.map((bar, index) => (
               <div
                 key={bar.label}
-                className={`${bar.tone} relative flex h-12 items-center justify-center rounded-full px-5 text-center text-[15px] font-medium tracking-[-0.03em] sm:h-14 sm:text-[16px] ${
+                className={`${bar.tone} relative flex h-16 items-center justify-center rounded-full px-6 text-center text-[1.15rem] font-medium tracking-[-0.03em] sm:h-[4.5rem] sm:px-7 sm:text-[1.3rem] ${
                   playing
                     ? "translate-y-0 opacity-100"
                     : "translate-y-4 opacity-0"
@@ -899,7 +899,7 @@ function SectionsScene({
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#F8F8F6] px-8 font-[family-name:var(--font-storyline-sans)] text-[#1E053A] sm:px-12">
       <div className="relative z-10 flex w-full max-w-[820px] flex-col items-center text-center">
         <p
-          className={`${SCENE_TITLE_CLASS} transition-all duration-[1200ms] ${
+          className={`text-[2.5rem] leading-[1.12] font-medium tracking-[-0.035em] transition-all duration-[1200ms] sm:text-[2.85rem] ${
             playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
           }`}
           style={{ transitionTimingFunction: SCENE_EASE }}
@@ -908,7 +908,7 @@ function SectionsScene({
         </p>
         {section.subtitle ? (
           <p
-            className={`${SCENE_TITLE_CLASS} mt-2 text-[#1E053A]/55 transition-all duration-[1200ms] ${
+            className={`mt-3 whitespace-nowrap text-[2.5rem] leading-[1.12] font-medium tracking-[-0.035em] text-[#1E053A]/55 transition-all duration-[1200ms] sm:text-[2.85rem] ${
               playing ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
             }`}
             style={{
