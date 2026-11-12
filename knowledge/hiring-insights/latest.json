@@ -1,0 +1,268 @@
+{
+  "syncedAt": "2026-11-12T19:48:35.457Z",
+  "sourceUrl": "https://storyline.design/api/metrics",
+  "pageUrl": "https://storyline.design/hiring-insights/",
+  "metrics": {
+    "source": "live",
+    "influence": {
+      "question": "How much does a portfolio influence getting a first interview?",
+      "segments": [
+        {
+          "label": "Very little",
+          "percent": 0,
+          "color": "#9B8FC7"
+        },
+        {
+          "label": "Some",
+          "percent": 24,
+          "color": "#C0D6FF"
+        },
+        {
+          "label": "Strong",
+          "percent": 76,
+          "color": "#FF7B5A"
+        }
+      ]
+    },
+    "timeSpent": {
+      "question": "Time spent during an initial portfolio review",
+      "segments": [
+        {
+          "label": "<30 sec",
+          "percent": 14,
+          "color": "#C0D6FF"
+        },
+        {
+          "label": "1–3 min",
+          "percent": 57,
+          "color": "#FF7B5A"
+        },
+        {
+          "label": "3+ min",
+          "percent": 19,
+          "color": "#C9B8F0"
+        },
+        {
+          "label": "10+ min",
+          "percent": 10,
+          "color": "#F4AF2C"
+        }
+      ]
+    },
+    "roles": {
+      "question": "Role of respondents",
+      "segments": [
+        {
+          "label": "Recruiter / Talent Acquisition",
+          "percent": 43,
+          "color": "#C9B8F0"
+        },
+        {
+          "label": "Head / Director / VP of Design",
+          "percent": 29,
+          "color": "#FF7B5A"
+        },
+        {
+          "label": "Design Manager",
+          "percent": 28,
+          "color": "#C0D6FF"
+        }
+      ]
+    },
+    "whatMatters": {
+      "question": "What factors matter when deciding whether to progress a candidate?",
+      "items": [
+        {
+          "label": "Overall portfolio presentation",
+          "percent": 57,
+          "color": "#F2B8EB"
+        },
+        {
+          "label": "Clear explanation of individual contribution",
+          "percent": 52,
+          "color": "#FF7B5A"
+        },
+        {
+          "label": "Problem-solving & design decisions",
+          "percent": 52,
+          "color": "#C9B8F0"
+        },
+        {
+          "label": "Relevance of experience",
+          "percent": 52,
+          "color": "#C0D6FF"
+        },
+        {
+          "label": "Clear communication & storytelling",
+          "percent": 43,
+          "color": "#F4AF2C"
+        },
+        {
+          "label": "Visual/UI craft",
+          "percent": 43,
+          "color": "#9CD9BE"
+        },
+        {
+          "label": "Quality/depth of case studies",
+          "percent": 38,
+          "color": "#F2B8EB"
+        },
+        {
+          "label": "Evidence of impact/outcomes",
+          "percent": 33,
+          "color": "#FF7B5A"
+        }
+      ]
+    },
+    "carriesMoreWeight": {
+      "question": "What carries more weight when evaluating a designer?",
+      "items": [
+        {
+          "label": "Thinking and decisions behind the work",
+          "percent": 58,
+          "color": "#F2B8EB"
+        },
+        {
+          "label": "Quality of the work shown",
+          "percent": 42,
+          "color": "#FF7B5A"
+        }
+      ]
+    },
+    "weightByRole": {
+      "items": [
+        {
+          "role": "Hiring decision maker",
+          "qualityPercent": 38,
+          "thinkingPercent": 73
+        },
+        {
+          "role": "Recruiter",
+          "qualityPercent": 63,
+          "thinkingPercent": 27
+        }
+      ]
+    },
+    "caseStudies": {
+      "question": "How important are case studies when evaluating a designer?",
+      "items": [
+        {
+          "label": "Essential",
+          "percent": 13
+        },
+        {
+          "label": "Moderately important",
+          "percent": 53
+        },
+        {
+          "label": "Slightly important",
+          "percent": 33
+        }
+      ]
+    },
+    "progressionBlockers": {
+      "question": "What prevents candidates from progressing?",
+      "items": [
+        {
+          "label": "Doesn't demonstrate the skills required",
+          "percent": 57,
+          "color": "#F2B8EB"
+        },
+        {
+          "label": "Portfolio and projects feel generic or too similar",
+          "percent": 52,
+          "color": "#FF7B5A"
+        },
+        {
+          "label": "Experience isn't relevant enough to the role",
+          "percent": 48,
+          "color": "#C9B8F0"
+        },
+        {
+          "label": "Difficult to navigate or understand",
+          "percent": 43,
+          "color": "#C0D6FF"
+        },
+        {
+          "label": "Case studies are too long or hard to scan",
+          "percent": 33,
+          "color": "#F4AF2C"
+        },
+        {
+          "label": "Too much process, not enough reasoning",
+          "percent": 33,
+          "color": "#9CD9BE"
+        },
+        {
+          "label": "Case studies lack enough depth",
+          "percent": 24,
+          "color": "#F2B8EB"
+        },
+        {
+          "label": "Unclear individual contribution",
+          "percent": 24,
+          "color": "#FF7B5A"
+        }
+      ]
+    },
+    "portfolioProblems": {
+      "question": "What are the biggest problems hiring teams encounter?",
+      "items": [
+        {
+          "label": "Poor visual presentation",
+          "percent": 62,
+          "color": "#F2B8EB"
+        },
+        {
+          "label": "Generic case study structures",
+          "percent": 52,
+          "color": "#FF7B5A"
+        },
+        {
+          "label": "Beautiful presentation but little substance",
+          "percent": 43,
+          "color": "#C9B8F0"
+        },
+        {
+          "label": "Not enough relevant projects",
+          "percent": 33,
+          "color": "#C0D6FF"
+        },
+        {
+          "label": "Too much information",
+          "percent": 33,
+          "color": "#F4AF2C"
+        },
+        {
+          "label": "Too little context",
+          "percent": 29,
+          "color": "#9CD9BE"
+        },
+        {
+          "label": "Too many projects",
+          "percent": 19,
+          "color": "#F2B8EB"
+        },
+        {
+          "label": "Work isn't positioned for the role",
+          "percent": 19,
+          "color": "#FF7B5A"
+        }
+      ]
+    },
+    "impact": {
+      "portfolioStrongInfluence": 76,
+      "threeMinutesOrLess": 71,
+      "aiChangedEvaluation": 67,
+      "unclearContributionOften": 24,
+      "thinkingWeight": 58,
+      "workQuality": 42,
+      "visualAlone": 0,
+      "genericPortfolios": 52,
+      "communicationStorytelling": 43,
+      "contributionClarity": 52,
+      "impactEvidence": 33
+    },
+    "lastUpdated": "12 Nov 2026"
+  }
+}
