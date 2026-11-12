@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "description": "Maps content package IDs to exported Figma/visual assets. Fill as exports land in this folder.",
+  "assets": []
+}

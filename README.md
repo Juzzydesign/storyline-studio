@@ -15,6 +15,7 @@ storyline-studio/
 │   ├── portfolio-examples/
 │   └── personal-insights/
 ├── content/                 # drafts and published pieces
+│   ├── packages/            # briefs / hubs (start here for each idea)
 │   ├── youtube/
 │   ├── newsletters/
 │   ├── articles/
@@ -22,7 +23,8 @@ storyline-studio/
 ├── assets/                  # diagrams, illustrations, templates
 │   ├── diagrams/
 │   ├── illustrations/
-│   └── templates/
+│   ├── templates/
+│   └── manifest.json        # package ID → exported visual map
 ├── rules/                   # editorial, writing, research guidelines
 ├── scripts/
 │   └── sync-hiring-insights.mjs
@@ -38,8 +40,9 @@ storyline-studio/
 | `knowledge/` | Inputs — research, hiring insights, examples, personal notes |
 | `knowledge/research/icp/` | Storage only — archived interviews; not for content/automation yet |
 | `knowledge/hiring-insights/` | Live hiring survey metrics synced from storyline.design (Vercel) |
-| `content/` | Outputs — YouTube, newsletters, articles, LinkedIn |
-| `assets/` | Creative source files (not the Next.js `public/` folder) |
+| `content/` | Outputs — packages (briefs), then YouTube, newsletters, articles, LinkedIn |
+| `content/packages/` | One brief per idea; links drafts and assets by ID |
+| `assets/` | Creative source files + `manifest.json` for Figma exports |
 | `rules/` | Voice and quality constraints for humans and future automation |
 | `src/` | Interactive studio for recording frames and project work |
 

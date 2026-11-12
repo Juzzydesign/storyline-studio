@@ -33,4 +33,4 @@ Our goal isn't to teach designers how to make prettier portfolios or follow anot
 
 ## Source of truth
 
-Pull from `knowledge/` first (except `research/icp/`, which is storage only until activated). Drafts live in `content/`. Visual systems eventually link from assets / Figma.
+Pull from `knowledge/` first (except `research/icp/`, which is storage only until activated). Start each piece in `content/packages/`, then draft in the channel folders under `content/`. Visuals land in `assets/` (and Figma).
