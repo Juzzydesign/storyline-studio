@@ -2,8 +2,8 @@
 
 Synced from [storyline.design/hiring-insights](https://storyline.design/hiring-insights/) via the live Vercel metrics API.
 
-- Synced at: 2026-11-16T14:05:37.910Z
-- Survey last updated: 16 Nov 2026
+- Synced at: 2026-11-17T01:10:51.242Z
+- Survey last updated: 17 Nov 2026
 - Data source: live
 
 ## Headline metrics
